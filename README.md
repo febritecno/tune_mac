@@ -1,28 +1,41 @@
-# Tune MAC | Speed up your mac
+# tune_mac — Make Your Mac Ultra Fast ⚡
 
-Spotlight → Applications only. Caches → stale ones cleared. Animations → off.
-Accessibility → reduce transparency, increase contrast, reduce motion.
+One-liner. Zero install. Pulihkan kapan saja.
 
-```
+```bash
 curl -fsSL https://raw.githubusercontent.com/febritecno/tune_mac/main/tune_mac.sh | bash
 curl -fsSL https://raw.githubusercontent.com/febritecno/tune_mac/main/tune_mac.sh | bash -s -- --restore
 ```
 
-## What
+---
 
-| # | What | Effect |
-|---|------|--------|
-| 1 | Spotlight | Only Applications indexed. Web/Siri suggestions off. |
-| 2 | Caches | Stale `~/Library/Caches` cleared (skips in-use). |
-| 3 | Display | Animations off. Transparency reduced. Contrast increased. Motion reduced. |
-| 4 | Network | Handoff, AirDrop, and advertising disabled. |
+## Apa yang Dilakukan Script Ini dalam 1 Detik?
 
-## Usage
+Script ini mengeliminasi overhead visual dan proses background yang tidak krusial di macOS Anda, memberikan penghematan daya GPU/CPU yang nyata (sangat terasa di chip Apple Silicon M1/M2/M3):
+
+**🔍 Spotlight Turbo Mode**
+Menghentikan proses indexing dokumen, foto, dan email yang berat. Menjadikan Spotlight super ringan karena hanya mencari Aplikasi saja.
+
+**⚡ Zero-Delay UI**
+Mematikan total animasi window, efek gerak (motion), transparency, serta mempercepat respon munculnya Dock dan Notification Center menjadi instan.
+
+**🎨 GPU Rendering Optimization**
+Menghapus efek visual berat seperti window blur, efek smooth scrolling, dan rubber-band bounce untuk meringankan beban kerja WindowServer.
+
+**📡 Background Silent Mode**
+Mematikan scanning Bluetooth/Radio di background untuk Handoff dan AirDrop yang sering kali diam-diam memakan daya CPU.
+
+**🗑️ Cache Garbage Collector**
+Membersihkan file cache user yang usang dan menumpuk tanpa mengganggu file yang sedang aktif digunakan oleh sistem.
+
+---
+
+## Cara Pakai
 
 ```bash
 source tune_mac.sh
 tune_mac            # apply
-tune_mac restore    # revert
+tune_mac restore    # revert ke default macOS
 ```
 
-Log: `~/Library/Logs/tune_mac_*.log`
+Log lengkap: `~/Library/Logs/tune_mac_*.log`
