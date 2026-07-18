@@ -78,6 +78,7 @@ PYEOF
 
         echo "=== Restoring animation/UI defaults ===" | tee -a "$LOG"
         defaults delete com.apple.universalaccess reduceTransparency 2>/dev/null
+        defaults delete com.apple.universalaccess increaseContrast 2>/dev/null
         defaults delete com.apple.universalaccess reduceMotion 2>/dev/null
         defaults delete com.apple.dock launchanim 2>/dev/null
         defaults delete com.apple.dock autohide-time-modifier 2>/dev/null
@@ -173,6 +174,7 @@ PYEOF
     # --- 3. Animation / UI speed tweaks --------------------------------------
     (
     defaults write com.apple.universalaccess reduceTransparency -bool true
+    defaults write com.apple.universalaccess increaseContrast -bool true
     defaults write com.apple.universalaccess reduceMotion -bool true
     defaults write com.apple.dock launchanim -bool false
     defaults write com.apple.dock autohide-time-modifier -float 0
@@ -208,6 +210,7 @@ PYEOF
     printf "  • Spotlight: Applications only\n"
     printf "  • Caches: stale data cleared\n"
     printf "  • Animations: disabled\n"
+    printf "  • Accessibility: reduce transparency, increase contrast, reduce motion\n"
     printf "\n"
     printf "  Run  tune_mac restore  to revert.\n"
     printf "  Log: %s\n" "$LOG"
