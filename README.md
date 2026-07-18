@@ -1,35 +1,28 @@
 # Tune MAC | Speed up your mac
 
-> **make your Mac ultra fast** — Spotlight trim, cache sweep, animation kill.
+Spotlight → Applications only. Caches → stale ones cleared. Animations → off.
+Accessibility → reduce transparency, increase contrast, reduce motion.
 
-One function. Three optimizations. Zero install.
-
-## One-liner
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/febritecno/tune_mac/main/tune_mac.sh | bash -s -- --apply
 ```
-
-To revert everything back to macOS defaults:
-
-```bash
+curl -fsSL https://raw.githubusercontent.com/febritecno/tune_mac/main/tune_mac.sh | bash
 curl -fsSL https://raw.githubusercontent.com/febritecno/tune_mac/main/tune_mac.sh | bash -s -- --restore
 ```
 
-## What it does
+## What
 
-| # | Area | Effect |
+| # | What | Effect |
 |---|------|--------|
-| 1 | **Spotlight** | Only "Applications" indexed. Web/Siri suggestions off. |
-| 2 | **Caches** | Stale user caches cleared (skips files in use). |
-| 3 | **Animations** | Dock, Finder, Mission Control, Safari, window server, Handoff, AirDrop — all trimmed or disabled. |
+| 1 | Spotlight | Only Applications indexed. Web/Siri suggestions off. |
+| 2 | Caches | Stale `~/Library/Caches` cleared (skips in-use). |
+| 3 | Display | Animations off. Transparency reduced. Contrast increased. Motion reduced. |
+| 4 | Network | Handoff, AirDrop, and advertising disabled. |
 
-## Manual usage
+## Usage
 
 ```bash
 source tune_mac.sh
-tune_mac       # apply
-tune_mac restore  # revert
+tune_mac            # apply
+tune_mac restore    # revert
 ```
 
-Everything is logged to `~/Library/Logs/tune_mac_*.log`.
+Log: `~/Library/Logs/tune_mac_*.log`
