@@ -1,5 +1,7 @@
 # tune_mac — Make Your Mac Ultra Fast ⚡
 
+[English](./README.md) | [Bahasa Indonesia](./README.id.md) | [Español](./README.es.md) | [Français](./README.fr.md) | [Deutsch](./README.de.md) | [日本語](./README.ja.md) | [中文](./README.zh.md)
+
 One-liner. Zero install. Reversible anytime.
 
 ### Apply (speed up)
