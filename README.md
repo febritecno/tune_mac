@@ -1,46 +1,46 @@
 # tune_mac — Make Your Mac Ultra Fast ⚡
 
-One-liner. Zero install. Pulihkan kapan saja.
+One-liner. Zero install. Reversible anytime.
 
 ### Apply (speed up)
 ```bash
 curl -fsSL https://raw.githubusercontent.com/febritecno/tune_mac/main/tune_mac.sh | bash
 ```
 
-### Restore (kembali ke default macOS)
+### Restore (back to macOS defaults)
 ```bash
 curl -fsSL https://raw.githubusercontent.com/febritecno/tune_mac/main/tune_mac.sh | bash -s -- --restore
 ```
 
 ---
 
-## Apa yang Dilakukan Script Ini dalam 1 Detik?
+## What This Script Does in 1 Second
 
-Script ini mengeliminasi overhead visual dan proses background yang tidak krusial di macOS Anda, memberikan penghematan daya GPU/CPU yang nyata (sangat terasa di chip Apple Silicon M1/M2/M3):
+This script eliminates visual overhead and non-essential background processes on your macOS, delivering real GPU/CPU power savings (especially noticeable on Apple Silicon M1/M2/M3 chips):
 
 **🔍 Spotlight Turbo Mode**
-Menghentikan proses indexing dokumen, foto, dan email yang berat. Menjadikan Spotlight super ringan karena hanya mencari Aplikasi saja.
+Stops heavy indexing of documents, photos, and email. Makes Spotlight super lightweight by searching Applications only.
 
 **⚡ Zero-Delay UI**
-Mematikan total animasi window, efek gerak (motion), transparency, serta mempercepat respon munculnya Dock dan Notification Center menjadi instan.
+Completely disables window animations, motion effects, transparency, and makes Dock and Notification Center respond instantly.
 
 **🎨 GPU Rendering Optimization**
-Menghapus efek visual berat seperti window blur, efek smooth scrolling, dan rubber-band bounce untuk meringankan beban kerja WindowServer.
+Removes heavy visual effects like window blur, smooth scrolling, and rubber-band bounce to reduce WindowServer workload.
 
 **📡 Background Silent Mode**
-Mematikan scanning Bluetooth/Radio di background untuk Handoff dan AirDrop yang sering kali diam-diam memakan daya CPU.
+Disables background Bluetooth/Radio scanning for Handoff and AirDrop that quietly drain CPU.
 
 **🗑️ Cache Garbage Collector**
-Membersihkan file cache user yang usang dan menumpuk tanpa mengganggu file yang sedang aktif digunakan oleh sistem.
+Cleans stale, accumulating user cache files without disturbing files actively in use by the system.
 
 ---
 
-## Cara Pakai
+## Usage
 
 ```bash
 source tune_mac.sh
 tune_mac            # apply
-tune_mac restore    # revert ke default macOS
+tune_mac restore    # revert to macOS defaults
 ```
 
-Log lengkap: `~/Library/Logs/tune_mac_*.log`
+Full log: `~/Library/Logs/tune_mac_*.log`
