@@ -1,4 +1,4 @@
-# tune_mac
+# Tune MAC | Speed up your mac
 
 > **make your Mac ultra fast** — Spotlight trim, cache sweep, animation kill.
 
