@@ -17,6 +17,29 @@ function tune_mac {
     local LOG="$HOME/Library/Logs/tune_mac_$(date +%Y%m%d_%H%M%S).log"
     echo "Log: $LOG"
 
+    # ── Spinner (background PID + message) ────────────────────────
+    local _spin='-\|/'
+    _spinner() {
+        local pid=$!
+        local msg="$1" i=0
+        printf "  %s  " "$msg"
+        while kill -0 $pid 2>/dev/null; do
+            printf "\b%c" "${_spin:$i:1}"
+            i=$(( (i+1) % 4 ))
+            sleep 0.08
+        done
+        wait $pid 2>/dev/null
+        printf "\b✓\n"
+    }
+    # ASCII banner
+    _header() {
+        printf "\n"
+        printf "  ╔══════════════════════════════════════╗\n"
+        printf "  ║       ⚡  tune_mac  —  Speed Up  ⚡   ║\n"
+        printf "  ╚══════════════════════════════════════╝\n"
+        printf "\n"
+    }
+
     # =====================================================================
     # RESTORE PATH
     # =====================================================================
@@ -91,12 +114,13 @@ PYEOF
     # APPLY PATH
     # =====================================================================
 
+    _header
+
     # --- 1. Spotlight: Applications only ------------------------------------
-    echo "=== [1/3] Spotlight: indexing Applications only ===" | tee -a "$LOG"
+    (
     local SPOTLIGHT_PLIST="$HOME/Library/Preferences/com.apple.spotlight.plist"
     local SPOTLIGHT_BACKUP="$HOME/Library/Preferences/com.apple.spotlight.plist.bak_$(date +%Y%m%d_%H%M%S)"
     [[ -f "$SPOTLIGHT_PLIST" ]] && cp "$SPOTLIGHT_PLIST" "$SPOTLIGHT_BACKUP"
-    echo "  (backup: $SPOTLIGHT_BACKUP)" | tee -a "$LOG"
 
     python3 - "$SPOTLIGHT_PLIST" <<'PYEOF' 2>>"$LOG"
 import plistlib, sys, os
@@ -130,31 +154,26 @@ PYEOF
     defaults write com.apple.lookup.shared LookupSuggestionsDisabled -bool true
     defaults write com.apple.Spotlight SuggestionsDisabled -bool true
 
-    # Make sure indexing itself is actually ON (needed for app search to work)
     local idx_status
     idx_status=$(mdutil -s / 2>&1)
     if echo "$idx_status" | grep -qi "disabled"; then
-        echo "  Index was OFF — turning it back on + rebuilding..." | tee -a "$LOG"
         sudo mdutil -i on / >>"$LOG" 2>&1
         sudo mdutil -E / >>"$LOG" 2>&1
     fi
+    ) & _spinner "[1/3] Spotlight: indexing Applications only"
 
     # --- 2. Clear stale caches -----------------------------------------------
-    echo "=== [2/3] Clearing stale caches (skipping files in use) ===" | tee -a "$LOG"
+    (
     find "$HOME/Library/Caches" -mindepth 1 -maxdepth 1 -print0 2>/dev/null | \
         while IFS= read -r -d '' d; do
             lsof +D "$d" >/dev/null 2>&1 || rm -rf "$d"
         done
-    echo "  Done clearing user cache." | tee -a "$LOG"
+    ) & _spinner "[2/3] Clearing stale caches"
 
     # --- 3. Animation / UI speed tweaks --------------------------------------
-    echo "=== [3/3] Applying animation/UI speed tweaks ===" | tee -a "$LOG"
-
-    # Core system effects
+    (
     defaults write com.apple.universalaccess reduceTransparency -bool true
     defaults write com.apple.universalaccess reduceMotion -bool true
-
-    # Dock & Mission Control
     defaults write com.apple.dock launchanim -bool false
     defaults write com.apple.dock autohide-time-modifier -float 0
     defaults write com.apple.dock autohide-delay -float 0
@@ -162,12 +181,8 @@ PYEOF
     defaults write com.apple.dock workspaces-swoosh-animation-off -bool true
     defaults write com.apple.dock mineffect -string "scale"
     defaults write com.apple.dock expose-group-apps -bool true
-
-    # Finder & Quick Look
     defaults write com.apple.finder DisableAllAnimations -bool true
     defaults write NSGlobalDomain QLPanelAnimationDuration -float 0
-
-    # Global UI & Window Server Rendering
     defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
     defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
     defaults write NSGlobalDomain NSWindowSupportsAutomaticInlineTitle -bool false
@@ -176,33 +191,26 @@ PYEOF
     defaults write NSGlobalDomain NSScrollViewRubberBanding -int 0
     defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
     defaults write NSGlobalDomain AppleFontSmoothing -int 0
-
-    # Notification Center & Window Manager
     defaults write com.apple.notificationcenterui bannerTime -int 3
     defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool false
-
-    # Safari Optimizations
     defaults write com.apple.Safari WebKitInitialTimedLayoutDelay -float 0
     defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-
-    # Background Radios (Handoff & AirDrop)
     defaults -currentHost write com.apple.coreservices.useractivityd ActivityAdvertisingAllowed -bool false
     defaults -currentHost write com.apple.coreservices.useractivityd ActivityReceivingAllowed -bool false
     defaults write com.apple.NetworkBrowser DisableAirDrop -bool true
-
-    # --- Apply everything ----------------------------------------------------
     killall cfprefsd Dock Finder SystemUIServer NotificationCenter Spotlight Safari 2>/dev/null
+    ) & _spinner "[3/3] Animation & UI optimizations"
 
-    echo ""
-    echo "=== tune_mac complete ==="
-    echo "1. Spotlight: only Applications searchable (web/Siri suggestions off too)"
-    echo "2. Stale user caches cleared"
-    echo "3. Animations disabled & advanced rendering optimizations applied"
-    echo ""
-    echo "Note: if Spotlight was reindexing, it may take a few minutes to finish."
-    echo "Check anytime with: mdutil -s /"
-    echo "Run 'tune_mac restore' to revert everything."
-    echo "Full log: $LOG"
+    printf "\n  ╔══════════════════════════════════════╗\n"
+    printf "  ║     ✓  tune_mac  complete!           ║\n"
+    printf "  ╚══════════════════════════════════════╝\n"
+    printf "\n"
+    printf "  • Spotlight: Applications only\n"
+    printf "  • Caches: stale data cleared\n"
+    printf "  • Animations: disabled\n"
+    printf "\n"
+    printf "  Run  tune_mac restore  to revert.\n"
+    printf "  Log: %s\n" "$LOG"
 }
 
 # Auto-execute when piped (not sourced)
