@@ -216,11 +216,11 @@ PYEOF
     printf "  Log: %s\n" "$LOG"
 }
 
-# Auto-execute when piped (not sourced)
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+# Auto-execute when run directly OR piped (not when sourced)
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]] || [[ -p /dev/stdin ]]; then
     case "${1:-}" in
     --apply|apply|"") tune_mac ;;
     --restore|restore) tune_mac restore ;;
-    *) echo "Usage: source tune_mac.sh && tune_mac [restore]" >&2; exit 1 ;;
+    *) echo "Usage: bash tune_mac.sh [--apply|--restore]" >&2; exit 1 ;;
     esac
 fi
