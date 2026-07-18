@@ -2,8 +2,13 @@
 
 One-liner. Zero install. Pulihkan kapan saja.
 
+### Apply (speed up)
 ```bash
 curl -fsSL https://raw.githubusercontent.com/febritecno/tune_mac/main/tune_mac.sh | bash
+```
+
+### Restore (kembali ke default macOS)
+```bash
 curl -fsSL https://raw.githubusercontent.com/febritecno/tune_mac/main/tune_mac.sh | bash -s -- --restore
 ```
 
